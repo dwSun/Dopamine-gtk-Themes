@@ -65,10 +65,11 @@ for theme in '' '-nord' '-dracula' '-gruvbox' '-tokyo-night' '-everforest' '-mon
 
     esac
 
-  rm -f "assets${theme}.svg"
-  cp -rf "assets.svg" "assets${theme}.svg"
-  sed -i "s/#1A73E8/${theme_color_dark}/g" "assets${theme}.svg"
-  sed -i "s/#3281EA/${theme_color_light}/g" "assets${theme}.svg"
+  if [ -n "$theme" ]; then
+    cp -rf "assets.svg" "assets${theme}.svg"
+    sed -i "s/#1A73E8/${theme_color_dark}/g" "assets${theme}.svg"
+    sed -i "s/#3281EA/${theme_color_light}/g" "assets${theme}.svg"
+  fi
 done
 
 echo -e "DONE!"
