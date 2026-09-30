@@ -140,6 +140,24 @@ ln -sfn "$theme/gtk-4.0/assets" "$HOME/.config/gtk-4.0/assets"
 
 新增或修改配色的方法见 [CUSTOMIZATION.md](CUSTOMIZATION.md)。
 
+## 构建
+
+本仓库只保留源码，不提交编译产物。克隆后、安装前请先运行：
+
+```sh
+./build.sh
+```
+
+该脚本会依次调用：
+
+- `./parse-sass.sh` —— 编译所有 GTK / GNOME Shell / Cinnamon 的 `.css`
+- `src/gtk/make-assets.sh` —— 按配色生成 `assets-<theme>.svg`
+- `src/gtk/render-assets.sh` —— 从 SVG 渲染出 `assets-<theme>/` 下的 PNG
+
+构建需要：`sassc`、`inkscape`（或 `rendersvg`）。
+
+构建完成后即可 `./install.sh` 安装。
+
 ## License
 
 本仓库整体以 [GNU General Public License v3.0](COPYING) 发布。

@@ -1,3 +1,15 @@
 *-temp.scss
 release/*.tar.xz
 .pi
+
+# Generated CSS (run ./build.sh or ./parse-sass.sh to regenerate)
+src/gtk/3.0/*.css
+src/gtk/4.0/*.css
+src/gnome-shell/shell-*/*.css
+src/cinnamon/*.css
+
+# Generated GTK assets (run src/gtk/make-assets.sh and src/gtk/render-assets.sh)
+src/gtk/assets-*.svg
+src/gtk/assets-*/
+!src/gtk/assets.svg
+!src/gtk/assets/
