@@ -1,0 +1,123 @@
+// When color definition differs for dark and light variant,
+// it gets @if ed depending on $variant
+
+@import 'tweaks-temp';
+@import 'color-palette';
+@import '../../_sass/theme-palettes';
+
+@function fade($c) {
+  @return mix($c, $grey_900, 50%);
+}
+
+@function foreground($color) {
+  $brightness: (red($color) * 299 + green($color) * 587 + blue($color) * 114) / 1000;
+  @if ($brightness >= 156) { @return rgba(theme-color('foreground-on-light'), 0.88); }
+  @return rgba(theme-color('foreground-on-dark'), 0.97);
+}
+
+// Shell-specific titlebar/panel resolver.
+// For the standard (light content + dark panel) variant we use the dark palette.
+$shell-header-bg: if($variant == 'dark' or $panel == 'dark', theme-color-mode('dark', 'titlebar'), theme-color-mode('light', 'titlebar'));
+
+$dark_fg_color:                       rgba(theme-color('foreground-on-dark'), 0.97);
+$light_fg_color:                      rgba(theme-color('foreground-on-dark'), 0.97);
+
+$button_fg_color:                     if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.72), rgba(theme-color('foreground-on-dark'), 0.88)); // extra fg color for raised buttons
+
+$fg_color:                            if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.88), rgba(theme-color('foreground-on-dark'), 0.97));
+$secondary_fg_color:                  if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.60), rgba(theme-color('foreground-on-dark'), 0.72));
+$hint_fg_color:                       if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.40), rgba(theme-color('foreground-on-dark'), 0.52));
+$disabled_fg_color:                   if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.40), rgba(theme-color('foreground-on-dark'), 0.52));
+$disabled_secondary_fg_color:         if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.26), rgba(theme-color('foreground-on-dark'), 0.32));
+$track_color:                         if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.20), rgba(theme-color('foreground-on-dark'), 0.16));
+$visit_color:                         if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.12), rgba(theme-color('foreground-on-dark'), 0.10));
+$divider_color:                       if($variant == 'light', rgba(theme-color('foreground-on-light'), 0.06), rgba(theme-color('foreground-on-dark'), 0.08));
+
+$panel_fg_color:                      if($panel == 'light', rgba(theme-color('foreground-on-light'), 0.88), rgba(theme-color('foreground-on-dark'), 0.97));
+$panel_secondary_fg_color:            if($panel == 'light', rgba(theme-color('foreground-on-light'), 0.75), rgba(theme-color('foreground-on-dark'), 0.75));
+$panel_hint_fg_color:                 if($panel == 'light', rgba(theme-color('foreground-on-light'), 0.55), rgba(theme-color('foreground-on-dark'), 0.55));
+$panel_disabled_fg_color:             if($panel == 'light', rgba(theme-color('foreground-on-light'), 0.35), rgba(theme-color('foreground-on-dark'), 0.45));
+$panel_disabled_secondary_fg_color:   if($panel == 'light', rgba(theme-color('foreground-on-light'), 0.26), rgba(theme-color('foreground-on-dark'), 0.30));
+$panel_track_color:                   if($panel == 'light', rgba(theme-color('foreground-on-light'), 0.24), rgba(theme-color('foreground-on-dark'), 0.16));
+$panel_divider_color:                 if($panel == 'light', rgba(theme-color('foreground-on-light'), 0.18), rgba(theme-color('foreground-on-dark'), 0.10));
+$panel_fill_color:                    if($panel == 'light', rgba(theme-color('foreground-on-light'), 0.02), rgba(theme-color('foreground-on-dark'), 0.06));
+
+$inverse_fg_color:                    rgba(theme-color('foreground-on-dark'), 0.90);
+$inverse_secondary_fg_color:          rgba(theme-color('foreground-on-dark'), 0.72);
+$inverse_hint_fg_color:               rgba(theme-color('foreground-on-dark'), 0.52);
+$inverse_disabled_fg_color:           rgba(theme-color('foreground-on-dark'), 0.52);
+$inverse_disabled_secondary_fg_color: rgba(theme-color('foreground-on-dark'), 0.32);
+$inverse_track_color:                 rgba(theme-color('foreground-on-dark'), 0.30);
+$inverse_divider_color:               rgba(theme-color('foreground-on-dark'), 0.16);
+$inverse_fill_color:                  rgba(theme-color('foreground-on-dark'), 0.08);
+
+// Background colors
+$base_color:                          theme-color('background');
+$alt_base_color:                      theme-color('surface');
+
+$dark_bg_color:                       rgba($shell-header-bg, 0.92);
+$alt_dark_bg_color:                   rgba($shell-header-bg, 0.78);
+$inverse_bg_color:                    rgba($inverse_fg_color, 0.13);
+$button_bg_color:                     if($variant == 'light', $base_color, lighten($base_color, 8%));
+$keyboard_bg_color:                   if($variant == 'light', theme-color-mode('light', 'base'), fade(theme-color-mode('dark', 'background'))); // for gnome-shell keyboard
+$alt_keyboard_bg_color:               if($variant == 'light', theme-color-mode('light', 'base-alt'), fade(#1f2937)); // for gnome-shell keyboard
+
+$popover_button_bg:                   if($variant == 'light', rgba(white, 0.35), rgba(white, 0.03));
+$popover_button_hover:                if($variant == 'light', rgba(black, 0.06), rgba(white, 0.08));
+$popover_button_active:               if($variant == 'light', rgba(black, 0.08), rgba(white, 0.12));
+
+@if $outline == 'false' {
+  $popover_button_bg:                 if($variant == 'light', rgba(black, 0.06), rgba(white, 0.05));
+  $popover_button_hover:              if($variant == 'light', rgba(black, 0.1), rgba(white, 0.12));
+  $popover_button_active:             if($variant == 'light', rgba(black, 0.16), rgba(white, 0.15));
+}
+
+$card_bg_color:                       if($variant == 'light', mix(white, $base_color, 35%), mix(white, $base_color, 3%));
+$card_hover_color:                    if($variant == 'light', mix(black, $base_color, 6%), mix(white, $base_color, 8%));
+$card_active_color:                   if($variant == 'light', mix(black, $base_color, 8%), mix(white, $base_color, 12%));
+
+@if $outline == 'false' {
+  $card_bg_color:                     if($variant == 'light', mix(black, $base_color, 6%), mix(white, $base_color, 5%));
+  $card_hover_color:                  if($variant == 'light', mix(black, $base_color, 10%), mix(white, $base_color, 12%));
+  $card_active_color:                 if($variant == 'light', mix(black, $base_color, 16%), mix(white, $base_color, 15%));
+}
+
+// Misc colors
+$primary_color:                       theme-color('primary');
+$alt_primary_color:                   darken($primary_color, 3%);
+$accent_color:                        lighten($primary_color, 3%);
+$primary_fg_color:                    foreground($primary_color);
+$focus_color:                         $accent_color; // slider/OSD progress fill
+
+$panel_bg:                            $shell-header-bg;
+$panel_bg_color:                      if($opacity == 'default', rgba($shell-header-bg, 0.5), $panel_bg);
+$menu_bg_color:                       if($opacity == 'default', rgba($base_color, 0.97), $base_color);
+$system_bg_color:                     #1e1e1f;
+
+$link_color:                          theme-color('link');
+$visited_link_color:                  theme-color('link-visited');
+
+$warning_color:                       theme-color('warning');
+$error_color:                         theme-color('error');
+$success_color:                       theme-color('success');
+
+$suggested_color:                     $accent_color;
+$destructive_color:                   $error_color;
+
+$info_bg_color:                       #8fc7ff;
+$question_bg_color:                   #abd5ed;
+$warning_bg_color:                    #eecfa0;
+$error_bg_color:                      #edabab;
+
+$fg-on-light:                         theme-color-mode('light', 'foreground-on-light');
+$fg-on-dark:                          theme-color-mode('dark', 'foreground-on-dark');
+
+$border_color:                        if($variant == 'light', rgba($fg-on-light, 0.12), rgba($fg-on-dark, 0.16));
+$md_border_color:                     if($variant == 'light', transparent, rgba(theme-color('foreground-on-dark'), 0.10));
+$icon_border_color:                   rgba($fg-on-light, 0.12);
+$panel_border_color:                  if($variant == 'light', rgba($fg-on-light, 0.05), rgba($fg-on-dark, 0.12));
+$popover_button_border:               if($variant == 'light', rgba($fg-on-light, 0.12), rgba($fg-on-dark, 0.05));
+
+$highlight_color:                     if($variant == 'light', rgba(#ffffff, 0.35), rgba(#ffffff, 0.10));
+$icon_highlight_color:                rgba(#ffffff, 0.10);
+$panel_highlight_color:               if($panel == 'light', rgba(#ffffff, 0.35), rgba(#ffffff, 0.10));

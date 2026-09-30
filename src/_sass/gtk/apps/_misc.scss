@@ -1,0 +1,590 @@
+/*********
+ * Tilix *
+ *********/
+overlay > revealer {
+  &.left > scrolledwindow.frame,
+  &.right > scrolledwindow.frame {
+    border-style: none;
+    box-shadow: $shadow-z16;
+  }
+
+  &.left > scrolledwindow.frame { margin-right: 32px; }
+
+  &.right > scrolledwindow.frame { margin-left: 32px; }
+}
+
+.terminix-session-sidebar, // for backward compatibility
+.tilix-session-sidebar { background-image: image($surface); }
+
+.terminal-titlebar button { border-radius: 0; }
+
+button.image-button.session-new-button { min-width: $medium-size - 4px; }
+
+// Remove extra padding
+notebook.tilix-background tab > box > stack { margin: -6px; }
+
+button.flat.tilix-small-button {
+  // NOTE: padding is hard-coded with:
+  // padding: 2px 4px;
+  min-height: $small-size - 2px * 2;
+  min-width: $small-size - 4px * 2;
+}
+
+
+/**************
+ * Terminator *
+ **************/
+.terminator-terminal-window {
+  paned > separator { background-color: $background; }
+
+  // this should be fixed by the upstream
+  notebook.frame { border-style: none; }
+}
+
+
+/*************
+ * Ubitquity *
+ *************/
+#live_installer .menubar progressbar trough {
+  border-radius: 4px; // Adjust to hard-coded progress border-radius
+  background-color: $titlebar-track-disabled;
+}
+
+
+/***********
+ * Eclipse *
+ ***********/
+window.background > box.vertical > scrolledwindow > widget toolbar {
+  padding: 2px;
+
+  separator,
+  button { margin: 2px; }
+
+  button { border-radius: $corner-radius; }
+}
+
+
+/************
+ * Chromium *
+ ************/
+window.background.chromium {
+  background-color: $surface;
+
+  // FIXME: There is no way to change the color of the toolbar buttons
+  // toolbar button { color: $text-secondary; }
+
+  // toolbar's border-bottom refers to button's border
+  // FIXME: Chrome's button border ignores theme's alpha value :(
+  entry,
+  > button { border: 1px solid $solid-border; }
+
+  > button {
+    color: $text;
+    background-color: $base;
+
+    &:disabled { color: $text-secondary-disabled; }
+  }
+
+  menubar,
+  headerbar { color: $titlebar-text-secondary; }
+
+  // Workaround for non-animatable buttons in headerbar
+  headerbar button {
+    &:active { background-image: image($track); }
+  }
+
+  spinner { color: $primary; }
+
+  // For text field
+  textview.view {
+    background-color: transparent;
+  }
+
+  // For prominent button, starred icon, etc.
+  treeview.view.cell:selected:focus {
+    color: on($primary);
+    background-image: image($primary);
+  }
+
+  // For table header
+  treeview.view button {
+    border: 1px solid $track;
+    // background-color: $base; // FIXME: This should not be necessary
+    // color: $text-secondary;
+  }
+
+  entry.chromium {
+    &, &:focus { // overrides standard borders
+      color: $text;
+    }
+
+    background-color: $fill;
+  }
+
+  // internal region of toolbar's entry widget
+  > textview.view, textview {
+    background-color: $fill;
+    color: $text;
+
+    selection { @extend %selected_items_primary; }
+  }
+}
+
+tooltip.background.chromium { background-color: rgba($tooltip, 1); }
+
+
+/***********
+ * Firefox *
+ ***********/
+#MozillaGtkWidget {
+  > widget {
+    // For popover, entry in toolbar, etc.
+    text {
+      background-color: $base;
+
+      selection {
+        &, &:focus {
+          @extend %selected_items_primary;
+        }
+      }
+    }
+
+    // For selection, active tab indicator, etc.
+    text:selected { // Use traditional selection style as workaround
+      @extend %selected_items_primary;
+    }
+
+    // For separators in bookmark toolbar
+    > separator { color: $divider; }
+
+    // avoid black border
+    // > scrollbar { background-clip: border-box; }
+
+    // Emphasize toolbar's border-bottom
+    > frame > border { border-color: $solid-border; }
+
+    > entry,
+    > button > button {
+      border: 1px solid $track;
+      border-radius: $corner-radius;
+      box-shadow: none;
+
+      &:disabled { border-color: $track-disabled; }
+    }
+
+    > entry {
+      min-height: 32px - 2px;
+      background-color: $base;
+
+      &:focus {
+        border-color: $primary;
+        box-shadow: inset 0 0 0 1px $primary;
+      }
+
+      &:disabled { background-color: $base-alt; }
+    }
+
+    > button > button {
+      padding: 4px 8px;
+      background-size: auto;
+
+      &:hover { box-shadow: inset 0 0 0 9999px $overlay-hover; }
+
+      &:active { background-image: image($overlay-active); }
+    }
+
+    // use 16px assets for hard-coded sizing
+    > checkbutton > check { @extend %small_check; }
+
+    > radiobutton > radio { @extend %small_radio; }
+
+    > checkbutton > check,
+    > radiobutton > radio {
+      margin: 0;
+      padding: 0;
+    }
+
+    // make check/radio visible regardless of whether the background is bright or dark
+    > checkbutton > check:not(:checked):not(:indeterminate),
+    > radiobutton > radio:not(:checked):not(:indeterminate) {
+      color: $grey-600;
+
+      &:hover, &:active { color: $grey-500; }
+
+      &:disabled { color: rgba($grey-600, 0.5); }
+    }
+  }
+
+  // remove ugly border around the menus
+  menu { border: none; }
+}
+
+// for backward compatibility
+#MozillaGtkWidget {
+  > widget {
+    > menubar {
+      color: $titlebar-text-secondary;
+
+      &:hover { color: $titlebar-text; }
+
+      &:disabled { color: $titlebar-text-secondary-disabled; }
+    }
+
+    > frame { color: $track; }
+  }
+
+  menu > separator { color: $divider; }
+}
+
+//
+// plank
+//
+
+window.background:not(.csd) {
+  > window > menu {
+    menuitem {
+      transition: none; // Fixed plank menu background issue
+    }
+  }
+}
+
+
+/************
+ * Inkscape *
+ ************/
+#ToolboxCommon {
+  > #AuxToolbox {
+    #StyleSwatch { font-size: smaller; }
+
+    #Kludge { padding: 0; }
+
+    spinbutton,
+    entry { min-height: 32px; }
+
+    button:not(.up):not(.down) {
+      min-height: 24px;
+      min-width: 16px;
+      padding: 4px 8px;
+      border-radius: $corner-radius;
+    }
+
+    spinbutton button { border-width: 4px; }
+  }
+
+  > toolbar.vertical {
+    margin-top: -4px;
+
+    button {
+      min-height: 24px;
+      min-width: 24px;
+      padding: 4px;
+      border-radius: $corner-radius;
+    }
+  }
+}
+
+#CanvasTable {
+  button {
+    min-height: 16px;
+    min-width: 16px;
+    padding: 0;
+  }
+
+  #HorizontalScrollbar { border-top: 1px solid $divider; }
+
+  #VerticalScrollbar {
+    &:dir(ltr) { border-left: 1px solid $divider; }
+
+    &:dir(rtl) { border-right: 1px solid $divider; }
+  }
+}
+
+#Canvas_and_Dock {
+  frame > border { border: none; }
+
+  // each canvases' titlebar
+  widget > widget {
+    > button.flat {
+      min-height: 16px;
+      min-width: 16px;
+      padding: 4px;
+    }
+
+    > box.horizontal image { padding: 4px; }
+  }
+
+  // vertical dock buttons
+  box.horizontal > box.vertical > button.flat {
+    min-height: 16px;
+    min-width: 24px;
+    padding: 8px 4px;
+  }
+}
+
+#DialogNotebook > viewport.frame {
+  border: 1px solid $border;
+  border-radius: $corner-radius;
+}
+
+#DockedDialogNotebook {
+  button.close-button {
+    background-color: transparent;
+  }
+  header {
+    background-color: $base-alt;
+  }
+}
+
+
+/***********
+ * Synapse *
+ ***********/
+box.vertical > widget > widget:selected { @extend %selected_items; }
+
+
+/***************
+ * MultiWriter *
+ ***************/
+window.background.csd > stack.view {
+  border-radius: 0 0 $window-radius $window-radius;
+}
+
+
+/*********
+ * Pamac *
+ *********/
+window.background.csd {
+  > box.vertical > overlay > stack > box.vertical > box.horizontal {
+    > revealer > stack {
+      &, // Search left side
+      > scrolledwindow > viewport.frame, // Installed left side
+      > box.vertical > stack > scrolledwindow > viewport.frame { // Browse left side
+        > list {
+          border: none;
+          border-radius: 0;
+
+          > row.activatable {
+            @extend %sidebar_row;
+          }
+        }
+      }
+    }
+
+    > box.vertical > stack > scrolledwindow > viewport.frame { // App lists
+      > list {
+        border: none;
+        border-radius: 0;
+
+        > row.activatable {
+          &:first-child, &:last-child { border-radius: 0; }
+        }
+      }
+    }
+  }
+
+  > box.vertical > overlay > stack > scrolledwindow.frame {  // >= 10.0
+    border: none;
+
+    > viewport.frame > box.vertical > stack > scrolledwindow {
+      border-top: 1px solid $divider;
+    }
+  }
+}
+
+entry.search > window.background {
+  border-radius: $window-radius;
+
+  > frame {
+    > border { border: none; }
+  }
+}
+
+
+/****************
+ * Libre-Office *
+ ****************/
+window.background:not(.solid-csd):not(.csd) {
+  // reserved area at the most-right side of GtkMenuBar
+  > grid.horizontal > grid.horizontal {
+    // FIXME: Breaks DroidCam style and does not change anything in LibreOffice
+    /*
+    background-color: $titlebar;
+    box-shadow: inset 0 -1px $divider;
+    */
+
+    > button.flat.small-button {
+      // 'close' button
+      border: none;
+      border-radius: $circular-radius;
+    }
+
+    // FIXME: Breaks DroidCam style and does not change anything in LibreOffice
+    /*
+    &:backdrop {
+      background-color: $titlebar-backdrop;
+    }
+    */
+  }
+
+  // for 'Notebookbar' toolbar
+  > notebook:not(.frame) {
+    border: none; // unset borders
+    background-color: $base;
+    box-shadow: none;
+
+    > stack {
+      border: none;
+      box-shadow: none;
+    }
+  }
+}
+
+#combobox {
+  > button { border-left: 1px solid $border; }
+}
+
+#gtk-combobox-popup-window {
+  scrolledwindow.frame { border: none; }
+
+  treeview.view {
+    &:selected, &:hover {
+      background-image: image($primary);
+      background-color: transparent;
+      color: on($primary);
+
+      label { color: on($primary); }
+    }
+  }
+}
+
+
+/******************
+ * SoundConverter *
+ ******************/
+//dialog.background > box.dialog-vbox.vertical > box.vertical > frame > widget > box.vertical > notebook > stack
+frame > widget > box.vertical > notebook > stack {
+  // make stack color match background one in settings dialog window
+  background-color: $background;
+}
+
+
+/***********
+ * xreader *
+ ***********/
+.xreader-window.background .primary-toolbar {
+  // add border under toolbar
+  border-bottom: 1px solid $border;
+  padding: 4px 2px;
+
+  // set titlebar color for toolbar, as that is done in Nemo
+  background-color: $titlebar;
+
+  &:backdrop {
+    // same on unfocus
+    background-color: $titlebar-backdrop;
+  }
+}
+
+
+/**********
+ * Lutris *
+ **********/
+// dialog.background.csd > box.dialog-vbox.vertical > box.horizontal > list
+box.dialog-vbox.vertical > box.horizontal > list {
+  // border right after list in settings window
+  border-right: 1px solid $border;
+}
+#lutris > stack:nth-child(2) > box.horizontal:nth-child(1) > box.vertical:nth-child(2) > revealer:nth-last-child(1) > box.horizontal {
+  // panel with "Play" button and other stuff that appears after click on game title
+  border-top: 1px solid $border;
+}
+
+
+/***********
+ * Brasero *
+ ***********/
+// FIXME: App is broken, rules work only if set as "GTK_STYLE_PROVIDER_PRIORITY_USER" (either CSS in "~/.config/gtk-3.0/gtk.css" or in GTK Inspector)
+window.background > box.vertical:nth-child(2) > notebook:nth-child(2) > stack:nth-child(1) > box.vertical:nth-child(2) > paned.horizontal:nth-child(2) > box.vertical > box.vertical:nth-child(1) > notebook:nth-child(2) > stack:nth-child(1) > frame:nth-child(1) > widget:nth-child(2) {
+  // fix white background in "New Project"
+  background-color: $base;
+}
+
+
+/*********
+ * Gpick *
+ *********/
+window.background > box.vertical:nth-child(2) > paned.horizontal:nth-child(2) > notebook.frame:nth-child(1) > stack:nth-child(2) > box.vertical:nth-child(3) > box.horizontal:nth-child(1) > widget:nth-child(1) > toolbar.horizontal:nth-child(1) {
+  // "New palette" tab, layout selection
+  background-color: transparent;
+}
+
+
+/***************
+ * Filechooser *
+ ***************/
+dialog > box > filechooser {
+  // add border to the bottom because it is absent in case file picker does not expect any file extension
+  // FIXME: Causes border above "Ok"/"Cancel" buttons when file extension is expected
+  border-bottom: 1px solid $border;
+}
+
+
+/*******
+ * Xed *
+ *******/
+window.background.xed-window > overlay:nth-child(2) > box.vertical:nth-child(1) > box.horizontal.xed-searchbar:nth-child(4) {
+  // search bar border, visible when search bar is hidden
+  border-top: 1px solid $border;
+}
+
+
+/*****************
+ * GNOME Drawing *
+ *****************/
+window.background > box.vertical:nth-child(2) > box.vertical.primary-toolbar:nth-child(1) {
+  // toolbar background
+  background-color: $titlebar;
+  &:backdrop {
+    background-color: $titlebar-backdrop;
+  }
+
+  // elements background on this toolbar
+  > box:nth-child(1) > toolbar.horizontal:nth-child(1) {
+    background-color: $titlebar;
+    &:backdrop {
+      background-color: $titlebar-backdrop;
+    }
+  }
+}
+
+
+/********
+ * Meld *
+ ********/
+// FIXME: App is broken, rules work only if set as "GTK_STYLE_PROVIDER_PRIORITY_USER" (either CSS in "~/.config/gtk-3.0/gtk.css" or in GTK Inspector)
+#meldapp.background.csd {
+  &, & > box.vertical:nth-child(3) > notebook.meld-notebook:nth-child(1) > stack:nth-child(2) {
+    // it has tabs and background color should match them
+    background-color: $base;
+  }
+}
+
+
+/*******************
+ * NVIDIA Settings *
+ *******************/
+// "Application Profiles" section
+window.background > box.vertical > paned.horizontal:nth-child(1) > box.horizontal:nth-child(3) > box.vertical:nth-child(1) > notebook.frame:nth-child(4) > stack:nth-child(2) > box.vertical > toolbar.horizontal:nth-child(1) {
+  // toolbar background and bottom border in "Rules/Profiles" table
+  background-color: $titlebar-backdrop;
+  border-bottom: 1px solid $border;
+}
+
+
+/*****************************************************
+ * Cinnamon "System Settings > Keyboard > Shortcuts" *
+ *****************************************************/
+window.background > box.vertical:nth-child(2) > stack:nth-child(2) > scrolledwindow:nth-child(2) > viewport:nth-last-child(3) > box.vertical:nth-child(1) > stack:nth-child(1) > box.vertical:nth-child(2) > box.vertical:nth-child(1) > box.horizontal:nth-child(1) > paned.horizontal:nth-child(1) > separator.wide:nth-child(2) {
+  // fix separator between "Categories" and "Keyboard shortcuts" tables has left and right borders
+  background-image: none;
+}
