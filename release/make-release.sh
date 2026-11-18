@@ -6,7 +6,7 @@ THEME_NAME=Dopamine
 
 _COLOR_VARIANTS=('-Light' '-Dark')
 _ROUND_VARIANTS=('' '-round')
-_THEME_VARIANTS=('-nord' '-dracula' '-gruvbox' '-tokyo-night' '-everforest' '-monokai' '-solarized' '-catppuccin' '-candy' '-tangerine' '-minty' '-berry' '-nebula')
+_THEME_VARIANTS=('-nord' '-gruvbox' '-monokai' '-catppuccin' '-candy' '-tangerine' '-berry' '-magenta' '-sakura' '-coral')
 
 if [ ! -z "${ROUND_VARIANTS:-}" ]; then
   IFS=', ' read -r -a _ROUND_VARIANTS <<< "${ROUND_VARIANTS:-}"

@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """
-Generate color preview images for every Dopamine variant.
+Generate README preview images for every Dopamine variant.
 
-Layout (640x360):
-  ┌─ Variant name + theme accent dot (small)──────────────┐
-  │                                                       │
-  │   Sample text on `background`, foreground = on(bg)    │
-  │                                                       │
-  ├─ 8 swatches: primary · success · warning · error ·    │
-  │              link · surface · base · base-alt        │
-  └───────────────────────────────────────────────────────┘
+Palettes are parsed straight out of ``src/_sass/_theme-palettes.scss`` so the
+pictures can never drift away from the shipped CSS again (the old version kept
+a hand-copied dict and silently missed the five dopamine variants, which is why
+README's "berry" used to be a solid pink rectangle instead of a theme).
 
-All colors come from the SCSS palette; semantic colors are the
-same ones used by src/_sass/_colors.scss.
+Each preview is a 640x360 mock window rendered from the real palette roles:
+
+  titlebar + traffic lights · sidebar (surface) · content (base)
+  selected row (accent) · suggested button (accent) · switch · progress bar
+
+Usage:
+    python3 scripts/gen-previews.py [OUTPUT_DIR]
 """
 from __future__ import annotations
 
@@ -21,223 +22,218 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-# ---------------------------------------------------------------------------
-# Palette — must mirror src/_sass/_colors.scss and src/gnome-shell/sass/_colors.scss
-# ---------------------------------------------------------------------------
-VARIANTS = [
-    "nord", "dracula", "gruvbox", "tokyo-night",
-    "everforest", "monokai", "solarized", "catppuccin",
-]
+from palette_utils import ROOT, PALETTE_SCSS, parse_palettes
 
-# Full palettes mirroring src/_sass/_theme-palettes.scss.
-# Each entry maps (mode) -> {role: hex} for mode in "light"|"dark".
-PALETTES = {
-    "nord": {
-        "light": {"primary": "#5e81ac", "background": "#eceff4", "surface": "#e5e9f0",
-                  "base": "#d8dee9", "base-alt": "#c8d0e0", "foreground": "#2e3440",
-                  "foreground-secondary": "#4c566a", "link": "#5e81ac", "link-visited": "#b48ead",
-                  "success": "#a3be8c", "warning": "#d08770", "error": "#bf616a"},
-        "dark":  {"primary": "#88c0d0", "background": "#2e3440", "surface": "#3b4252",
-                  "base": "#434c5e", "base-alt": "#4c566a", "foreground": "#d8dee9",
-                  "foreground-secondary": "#aebacf", "link": "#81a1c1", "link-visited": "#b48ead",
-                  "success": "#a3be8c", "warning": "#ebcb8b", "error": "#bf616a"},
-    },
-    "dracula": {
-        "light": {"primary": "#bd93f9", "background": "#f8f8f2", "surface": "#ffffff",
-                  "base": "#e6e6e6", "base-alt": "#d1d1d1", "foreground": "#282a36",
-                  "foreground-secondary": "#44475a", "link": "#6272a4", "link-visited": "#bd93f9",
-                  "success": "#50b26e", "warning": "#d79921", "error": "#e05555"},
-        "dark":  {"primary": "#ff79c6", "background": "#282a36", "surface": "#44475a",
-                  "base": "#6272a4", "base-alt": "#4a4e5f", "foreground": "#f8f8f2",
-                  "foreground-secondary": "#bfbfbf", "link": "#8be9fd", "link-visited": "#bd93f9",
-                  "success": "#50fa7b", "warning": "#ffb86c", "error": "#ff5555"},
-    },
-    "gruvbox": {
-        "light": {"primary": "#d79921", "background": "#fbf1c7", "surface": "#f2e5bc",
-                  "base": "#ebdbb2", "base-alt": "#d5c4a1", "foreground": "#3c3836",
-                  "foreground-secondary": "#665c54", "link": "#458588", "link-visited": "#b16286",
-                  "success": "#98971a", "warning": "#d65d0e", "error": "#cc241d"},
-        "dark":  {"primary": "#fabd2f", "background": "#282828", "surface": "#3c3836",
-                  "base": "#504945", "base-alt": "#665c54", "foreground": "#ebdbb2",
-                  "foreground-secondary": "#bdae93", "link": "#83a598", "link-visited": "#d3869b",
-                  "success": "#b8bb26", "warning": "#fe8019", "error": "#fb4934"},
-    },
-    "tokyo-night": {
-        "light": {"primary": "#565f89", "background": "#d5d6db", "surface": "#cbccd1",
-                  "base": "#c0c1c6", "base-alt": "#b0b1b6", "foreground": "#343a52",
-                  "foreground-secondary": "#565f89", "link": "#565f89", "link-visited": "#8b7cb3",
-                  "success": "#73a54c", "warning": "#b58a4f", "error": "#c55f73"},
-        "dark":  {"primary": "#7aa2f7", "background": "#1a1b26", "surface": "#24283b",
-                  "base": "#414868", "base-alt": "#2f334d", "foreground": "#c0caf5",
-                  "foreground-secondary": "#a9b1d6", "link": "#7aa2f7", "link-visited": "#bb9af7",
-                  "success": "#9ece6a", "warning": "#e0af68", "error": "#f7768e"},
-    },
-    "everforest": {
-        "light": {"primary": "#8da101", "background": "#fdf6e3", "surface": "#f3efd9",
-                  "base": "#e6e2cc", "base-alt": "#d8d4be", "foreground": "#5c6a72",
-                  "foreground-secondary": "#7a8478", "link": "#5f8a7d", "link-visited": "#b07aa1",
-                  "success": "#6e9a6e", "warning": "#c4a000", "error": "#d15f5f"},
-        "dark":  {"primary": "#a7c080", "background": "#2b3339", "surface": "#323d43",
-                  "base": "#3a454a", "base-alt": "#445055", "foreground": "#d3c6aa",
-                  "foreground-secondary": "#ada391", "link": "#7fbbb3", "link-visited": "#d699b6",
-                  "success": "#83c092", "warning": "#dbbc7f", "error": "#e67e80"},
-    },
-    "monokai": {
-        "light": {"primary": "#fd971f", "background": "#f8f8f2", "surface": "#ffffff",
-                  "base": "#e6e6e6", "base-alt": "#d1d1d1", "foreground": "#272822",
-                  "foreground-secondary": "#49483e", "link": "#4a9eb0", "link-visited": "#8b6bcc",
-                  "success": "#7fb224", "warning": "#d9791e", "error": "#d91e5f"},
-        "dark":  {"primary": "#f92672", "background": "#272822", "surface": "#3e3d32",
-                  "base": "#49483e", "base-alt": "#57584f", "foreground": "#f8f8f2",
-                  "foreground-secondary": "#c2c2b8", "link": "#66d9ef", "link-visited": "#ae81ff",
-                  "success": "#a6e22e", "warning": "#fd971f", "error": "#f92672"},
-    },
-    "solarized": {
-        "light": {"primary": "#268bd2", "background": "#fdf6e3", "surface": "#eee8d5",
-                  "base": "#e6e1cf", "base-alt": "#d9d3c1", "foreground": "#073642",
-                  "foreground-secondary": "#586e75", "link": "#268bd2", "link-visited": "#6c71c4",
-                  "success": "#859900", "warning": "#b58900", "error": "#dc322f"},
-        "dark":  {"primary": "#b58900", "background": "#002b36", "surface": "#073642",
-                  "base": "#083e4f", "base-alt": "#0e5368", "foreground": "#eee8d5",
-                  "foreground-secondary": "#93a1a1", "link": "#268bd2", "link-visited": "#6c71c4",
-                  "success": "#859900", "warning": "#cb4b16", "error": "#dc322f"},
-    },
-    "catppuccin": {
-        "light": {"primary": "#8839ef", "background": "#eff1f5", "surface": "#e6e9ef",
-                  "base": "#ccd0da", "base-alt": "#bcc0cc", "foreground": "#4c4f69",
-                  "foreground-secondary": "#6c6f85", "link": "#1e66f5", "link-visited": "#8839ef",
-                  "success": "#40a02b", "warning": "#df8e1d", "error": "#d20f39"},
-        "dark":  {"primary": "#f5c2e7", "background": "#1e1e2e", "surface": "#302d41",
-                  "base": "#41445a", "base-alt": "#4d516d", "foreground": "#d9e0ee",
-                  "foreground-secondary": "#b8b4c7", "link": "#96cdfb", "link-visited": "#ddb6f2",
-                  "success": "#abe9b3", "warning": "#fae3b0", "error": "#f28fad"},
-    },
+FONT_DIR = Path("/usr/share/fonts/MapleMonoNormal-NF-CN")
+FONT_FILES = {
+    "regular": FONT_DIR / "MapleMonoNormal-NF-CN-Regular.ttf",
+    "light": FONT_DIR / "MapleMonoNormal-NF-CN-Light.ttf",
+    "medium": FONT_DIR / "MapleMonoNormal-NF-CN-Medium.ttf",
+    "bold": FONT_DIR / "MapleMonoNormal-NF-CN-Bold.ttf",
 }
 
-# Default palette for the no-variant preview
-DEFAULT_PALETTE = PALETTES["nord"]
-
-# Convenience accessors kept for compatibility with the drawing code below.
-BG          = {"light": DEFAULT_PALETTE["light"]["background"], "dark": DEFAULT_PALETTE["dark"]["background"]}
-SURFACE     = {"light": DEFAULT_PALETTE["light"]["surface"],    "dark": DEFAULT_PALETTE["dark"]["surface"]}
-BASE        = {"light": DEFAULT_PALETTE["light"]["base"],       "dark": DEFAULT_PALETTE["dark"]["base"]}
-BASE_ALT    = {"light": DEFAULT_PALETTE["light"]["base-alt"],   "dark": DEFAULT_PALETTE["dark"]["base-alt"]}
-TEXT        = {"light": DEFAULT_PALETTE["light"]["foreground"], "dark": DEFAULT_PALETTE["dark"]["foreground"]}
-TEXT_DIM    = {"light": DEFAULT_PALETTE["light"]["foreground-secondary"], "dark": DEFAULT_PALETTE["dark"]["foreground-secondary"]}
-LINK        = {"light": DEFAULT_PALETTE["light"]["link"],       "dark": DEFAULT_PALETTE["dark"]["link"]}
-SUCCESS     = {"light": DEFAULT_PALETTE["light"]["success"],    "dark": DEFAULT_PALETTE["dark"]["success"]}
-WARNING     = {"light": DEFAULT_PALETTE["light"]["warning"],    "dark": DEFAULT_PALETTE["dark"]["warning"]}
-ERROR       = {"light": DEFAULT_PALETTE["light"]["error"],      "dark": DEFAULT_PALETTE["dark"]["error"]}
-BORDER      = {"light": DEFAULT_PALETTE["light"]["foreground"], "dark": DEFAULT_PALETTE["dark"]["foreground"]}
+W, H = 640, 360
 
 # ---------------------------------------------------------------------------
-# Image layout
+# Colour helpers
 # ---------------------------------------------------------------------------
-W, H         = 640, 360
-PAD          = 24
-TITLE_Y      = 24
-SAMPLE_Y     = 110
-SWATCH_Y     = 220
-SWATCH_H     = 96
-SWATCH_W     = (W - 2 * PAD - 7 * 12) // 8        # 8 swatches × 12px gap
-SAMPLE_LINE2 = 170
-
-FONT_REG = "/usr/share/fonts/MapleMonoNormal-NF-CN/MapleMonoNormal-NF-CN-Regular.ttf"
-FONT_BOLD = "/usr/share/fonts/MapleMonoNormal-NF-CN/MapleMonoNormal-NF-CN-Bold.ttf"
-FONT_LIGHT = "/usr/share/fonts/MapleMonoNormal-NF-CN/MapleMonoNormal-NF-CN-Light.ttf"
-
-
-def font(path: str, size: int) -> ImageFont.FreeTypeFont:
-    return ImageFont.truetype(path, size)
-
-
 def hex2rgb(s: str) -> tuple[int, int, int]:
     s = s.lstrip("#")
-    if len(s) != 6:
-        raise ValueError(f"Invalid hex color: {s!r}")
-    return (int(s[0:2], 16), int(s[2:4], 16), int(s[4:6], 16))
+    return int(s[0:2], 16), int(s[2:4], 16), int(s[4:6], 16)
 
 
-def text_width(draw: ImageDraw.ImageDraw, txt: str, fnt) -> int:
-    bbox = draw.textbbox((0, 0), txt, font=fnt)
-    return int(bbox[2] - bbox[0])
+def mix(a: str, b: str, t: float) -> tuple[int, int, int]:
+    """Blend hex a -> b by t (0 = a, 1 = b), returning RGB."""
+    ra, ga, ba = hex2rgb(a)
+    rb, gb, bb = hex2rgb(b)
+    return (
+        round(ra + (rb - ra) * t),
+        round(ga + (gb - ga) * t),
+        round(ba + (bb - ba) * t),
+    )
 
 
-def draw_preview(variant: str, mode: str, out: Path) -> None:
-    pal = PALETTES.get(variant, DEFAULT_PALETTE)[mode]
+def brightness(rgb: tuple[int, int, int]) -> float:
+    return (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000
+
+
+def ink_on(pal: dict[str, str], bg_hex: str) -> tuple[int, int, int]:
+    """Text colour GTK would pick on top of ``bg_hex`` (mirrors on())."""
+    role = "foreground-on-light" if brightness(hex2rgb(bg_hex)) >= 156 else "foreground-on-dark"
+    return hex2rgb(pal[role])
+
+
+def font(kind: str, size: int) -> ImageFont.FreeTypeFont:
+    # Fall back to Pillow's bundled font if Maple Mono Nerd is unavailable.
+    path = FONT_FILES.get(kind, FONT_FILES["regular"])
+    if path.exists():
+        return ImageFont.truetype(str(path), size)
+    return ImageFont.load_default(size)
+
+
+# ---------------------------------------------------------------------------
+# Drawing
+# ---------------------------------------------------------------------------
+def draw_preview(
+    name: str,
+    mode: str,
+    pal: dict[str, str],
+    out: Path,
+) -> None:
     accent = pal["primary"]
-    bg     = pal["background"]
-    fg     = pal["foreground"]
-    fgdim  = pal["foreground-secondary"]
+    bg = pal["background"]
+    surface = pal["surface"]
+    base = pal["base"]
+    base_alt = pal["base-alt"]
+    titlebar = pal.get("titlebar", bg)
+    fg = hex2rgb(pal["foreground"])
+    fg_dim = hex2rgb(pal["foreground-secondary"])
+    accent_rgb = hex2rgb(accent)
+    on_accent = ink_on(pal, accent)
 
     img = Image.new("RGB", (W, H), hex2rgb(bg))
     d = ImageDraw.Draw(img)
 
-    # 1px border so light variants are visible on white viewers
-    border_rgb = tuple(max(0, c - 30) for c in hex2rgb(pal["base-alt"]))
-    d.rectangle([0, 0, W - 1, H - 1], outline=border_rgb, width=1)
+    # --- window shell -----------------------------------------------------
+    wx0, wy0, wx1, wy1 = 18, 16, W - 18, H - 16
+    d.rounded_rectangle([wx0, wy0, wx1, wy1], radius=12, fill=hex2rgb(bg),
+                        outline=hex2rgb(base_alt), width=1)
 
-    # ---- Header ----
-    f_title = font(FONT_BOLD, 28)
-    f_meta = font(FONT_LIGHT, 13)
+    tb_h = 40
+    d.rounded_rectangle([wx0, wy0, wx1, wy0 + tb_h], radius=12, fill=hex2rgb(titlebar))
+    d.rectangle([wx0, wy0 + tb_h - 12, wx1, wy0 + tb_h], fill=hex2rgb(titlebar))
+    d.line([wx0 + 1, wy0 + tb_h, wx1 - 1, wy0 + tb_h], fill=hex2rgb(base_alt))
 
-    title = variant
-    d.text((PAD, TITLE_Y), title, fill=hex2rgb(accent), font=f_title)
+    # accent marker + title
+    f_title = font("medium", 13)
+    f_small = font("light", 10)
+    d.rounded_rectangle([wx0 + 16, wy0 + 13, wx0 + 20, wy0 + tb_h - 13], radius=2, fill=accent_rgb)
+    d.text((wx0 + 30, wy0 + 11), "Dopamine", fill=fg, font=f_title)
+    tw = d.textlength("Dopamine", font=f_title)
+    d.text((wx0 + 34 + tw, wy0 + 12), f"· {name}", fill=fg_dim, font=f_title)
 
-    meta = f"Dopamine · {mode.upper()} · accent {accent.upper()}"
-    meta_w = text_width(d, meta, f_meta)
-    d.text((W - PAD - meta_w, TITLE_Y + 10), meta, fill=hex2rgb(fgdim), font=f_meta)
+    # traffic lights (GTK order from right: close, minimize, maximize)
+    dot_r = 5
+    for idx, role in enumerate(("error", "warning", "success")):
+        cx = wx1 - 22 - idx * 18
+        cy = wy0 + tb_h // 2
+        d.ellipse([cx - dot_r, cy - dot_r, cx + dot_r, cy + dot_r],
+                  fill=hex2rgb(pal[role]))
 
-    # accent underline below title
-    title_w = text_width(d, title, f_title)
-    d.rectangle([PAD, TITLE_Y + 36, PAD + title_w, TITLE_Y + 39], fill=hex2rgb(accent))
+    # --- sidebar ----------------------------------------------------------
+    sx0, sy0, sx1, sy1 = wx0 + 1, wy0 + tb_h + 1, wx0 + 168, wy1 - 1
+    d.rectangle([sx0, sy0, sx1, sy1], fill=hex2rgb(surface))
+    d.line([sx1, sy0, sx1, sy1], fill=hex2rgb(base_alt))
 
-    # ---- Sample text ----
-    f_sample = font(FONT_REG, 18)
-    f_sample2 = font(FONT_REG, 14)
+    f_item = font("regular", 12)
+    items = ["Files", "Recent", "Starred", "Trash"]
+    for i, label in enumerate(items):
+        y = sy0 + 14 + i * 34
+        if i == 0:
+            sel = mix(surface, accent, 0.22)
+            d.rounded_rectangle([sx0 + 8, y - 6, sx1 - 10, y + 22], radius=6, fill=sel)
+            d.rounded_rectangle([sx0 + 8, y + 2, sx0 + 11, y + 14], radius=2, fill=accent_rgb)
+            d.text((sx0 + 20, y - 2), label, fill=on_accent if brightness(sel) > 156 else fg, font=f_item)
+        else:
+            d.text((sx0 + 20, y - 2), label, fill=fg_dim, font=f_item)
 
-    d.text((PAD, SAMPLE_Y),    "Maple Mono-inspired GTK theme", fill=hex2rgb(fg), font=f_sample)
-    d.text((PAD, SAMPLE_LINE2), "AaBbCc 0123 — 选定高亮 / 焦点进度环", fill=hex2rgb(fgdim), font=f_sample2)
+    # sidebar footer: user chip
+    d.ellipse([sx0 + 14, sy1 - 34, sx0 + 34, sy1 - 14], fill=accent_rgb)
+    d.text((sx0 + 42, sy1 - 31), "david", fill=fg_dim, font=f_small)
 
-    # ---- Swatch row (8 chips) ----
-    swatches = [
-        ("primary",  accent),
-        ("success",  pal["success"]),
-        ("warning",  pal["warning"]),
-        ("error",    pal["error"]),
-        ("link",     pal["link"]),
-        ("surface",  pal["surface"]),
-        ("base",     pal["base"]),
-        ("base-alt", pal["base-alt"]),
-    ]
-    f_label = font(FONT_LIGHT, 10)
-    x = PAD
-    for name, hexcol in swatches:
-        rgb = hex2rgb(hexcol)
-        d.rounded_rectangle(
-            [x, SWATCH_Y, x + SWATCH_W, SWATCH_Y + SWATCH_H],
-            radius=6,
-            fill=rgb,
-            outline=tuple(max(0, c - 40) for c in rgb) if mode == "light" else tuple(min(255, c + 40) for c in rgb),
-            width=1,
-        )
-        # label color: white-on-dark-chip if chip is dark, else dark text
-        brightness = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]
-        label_rgb = (255, 255, 255) if brightness < 140 else (16, 34, 45)
-        d.text((x + 8, SWATCH_Y + 8), name, fill=label_rgb, font=f_label)
-        d.text((x + 8, SWATCH_Y + SWATCH_H - 18), hexcol.upper(), fill=label_rgb, font=f_label)
-        x += SWATCH_W + 12
+    # --- content ----------------------------------------------------------
+    cx0 = sx1 + 1
+    d.rectangle([cx0, sy0, wx1 - 1, sy1], fill=hex2rgb(base))
+
+    d.text((cx0 + 18, sy0 + 14), "Recent files", fill=fg, font=font("medium", 13))
+    d.text((cx0 + 18, sy0 + 34), "selected row uses the accent colour", fill=fg_dim, font=f_small)
+
+    rows = [("berry-report.png", "2.4 MB"), ("palette-notes.md", "12 KB"), ("preview.png", "340 KB")]
+    row_y = sy0 + 58
+    for i, (label, meta) in enumerate(rows):
+        y = row_y + i * 38
+        if i == 1:
+            d.rounded_rectangle([cx0 + 12, y - 6, wx1 - 14, y + 26], radius=6, fill=accent_rgb)
+            d.text((cx0 + 22, y + 2), label, fill=on_accent, font=f_item)
+            w = d.textlength(meta, font=f_small)
+            d.text((wx1 - 26 - w, y + 4), meta, fill=on_accent, font=f_small)
+        else:
+            d.text((cx0 + 22, y + 2), label, fill=fg, font=f_item)
+            w = d.textlength(meta, font=f_small)
+            d.text((wx1 - 26 - w, y + 4), meta, fill=fg_dim, font=f_small)
+
+    # --- widgets ----------------------------------------------------------
+    wy = row_y + 3 * 38 + 4
+    # progress bar
+    d.text((cx0 + 18, wy), "progress", fill=fg_dim, font=f_small)
+    d.rounded_rectangle([cx0 + 18, wy + 16, cx0 + 178, wy + 24], radius=4, fill=hex2rgb(base_alt))
+    d.rounded_rectangle([cx0 + 18, wy + 16, cx0 + 118, wy + 24], radius=4, fill=accent_rgb)
+
+    # switch (on)
+    d.text((cx0 + 200, wy), "switch", fill=fg_dim, font=f_small)
+    d.rounded_rectangle([cx0 + 200, wy + 14, cx0 + 238, wy + 30], radius=8, fill=accent_rgb)
+    d.ellipse([cx0 + 222, wy + 16, cx0 + 236, wy + 30], fill=(255, 255, 255))
+
+    # buttons
+    by = wy + 44
+    d.rounded_rectangle([cx0 + 18, by, cx0 + 104, by + 26], radius=6, fill=accent_rgb)
+    bw = d.textlength("Suggested", font=f_small)
+    d.text((cx0 + 61 - bw / 2, by + 7), "Suggested", fill=on_accent, font=f_small)
+    d.rounded_rectangle([cx0 + 112, by, cx0 + 190, by + 26], radius=6,
+                        fill=hex2rgb(surface), outline=hex2rgb(base_alt), width=1)
+    bw = d.textlength("Cancel", font=f_small)
+    d.text((cx0 + 151 - bw / 2, by + 7), "Cancel", fill=fg, font=f_small)
+
+    # --- footer caption ---------------------------------------------------
+    cap = f"accent {accent}   ·   background {bg}   ·   base {base}"
+    d.text((wx0 + 16, H - 34), cap, fill=fg_dim, font=font("light", 10))
+    tag = mode.upper()
+    wtag = d.textlength(tag, font=f_small)
+    d.text((wx1 - 16 - wtag, H - 34), tag, fill=accent_rgb, font=f_small)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     img.save(out, format="PNG", optimize=True)
+    print(f"wrote {out}  ({name} {mode})")
+
+
+def make_contact_sheet(out_dir: Path, palettes: dict, mode: str) -> None:
+    """Paste all previews of one mode into a single review sheet."""
+    cols, thumb_w = 3, 400
+    gap, margin = 12, 16
+    names = [n for n, modes in palettes.items() if mode in modes]
+    rows = (len(names) + cols - 1) // cols
+    thumb_h = thumb_w * H // W
+    sheet = Image.new("RGB", (2 * margin + cols * thumb_w + (cols - 1) * gap,
+                              2 * margin + rows * thumb_h + (rows - 1) * gap), (24, 24, 24))
+    for i, name in enumerate(names):
+        src = out_dir / f"{name}-{mode}.png"
+        if not src.exists():
+            continue
+        img = Image.open(src).convert("RGB").resize((thumb_w, thumb_h), Image.LANCZOS)
+        x = margin + (i % cols) * (thumb_w + gap)
+        y = margin + (i // cols) * (thumb_h + gap)
+        sheet.paste(img, (x, y))
+    out = out_dir / f"contact-sheet-{mode}.png"
+    sheet.save(out, format="PNG", optimize=True)
     print(f"wrote {out}")
 
 
 def main() -> int:
-    root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("assets/preview")
-    for v in VARIANTS:
+    positional = [a for a in sys.argv[1:] if not a.startswith("--")]
+    out_dir = Path(positional[0]) if positional else ROOT / "assets/preview"
+    palettes = parse_palettes()
+    if not palettes:
+        print(f"ERROR: no palettes parsed from {PALETTE_SCSS}", file=sys.stderr)
+        return 1
+    for name, modes in palettes.items():
         for mode in ("light", "dark"):
-            draw_preview(v, mode, root / f"{v}-{mode}.png")
+            if mode not in modes:
+                continue
+            draw_preview(name, mode, modes[mode], out_dir / f"{name}-{mode}.png")
+    print(f"{len(palettes)} palettes written to {out_dir}")
+    if "--contact-sheet" in sys.argv:
+        for mode in ("dark", "light"):
+            make_contact_sheet(out_dir, palettes, mode)
     return 0
 
 

@@ -1,60 +1,12 @@
-#!/bin/bash
-set -ueo pipefail
-
-RENDER_SVG="$(command -v rendersvg)" || true
-INKSCAPE="$(command -v inkscape)" || true
-OPTIPNG="$(command -v optipng)" || true
-
-INDEX="assets.txt"
-
-for theme in '' '-nord' '-dracula' '-gruvbox' '-tokyo-night' '-everforest' '-monokai' '-solarized' '-catppuccin' '-candy' '-tangerine' '-minty' '-berry' '-nebula'; do
-
-ASSETS_DIR="assets${theme}"
-SRC_FILE="assets${theme}.svg"
-
-#[[ -d $ASSETS_DIR ]] && rm -rf $ASSETS_DIR
-mkdir -p $ASSETS_DIR
-
-for i in `cat $INDEX`; do
-echo "Rendering '$ASSETS_DIR/$i.png'"
-
-if [[ -f "$ASSETS_DIR/$i.png" ]]; then
-  echo "$ASSETS_DIR/$i.png" exists.
-else
-if [[ -n "${RENDER_SVG}" ]]; then
-  "$RENDER_SVG" --export-id "$i" \
-                "$SRC_FILE" "$ASSETS_DIR/$i.png"
-else
-  "$INKSCAPE" --export-id="$i" \
-              --export-id-only \
-              --export-filename="$ASSETS_DIR/$i.png" "$SRC_FILE" >/dev/null
-fi
-if [[ -n "${OPTIPNG}" ]]; then
-  "$OPTIPNG" -o7 --quiet "$ASSETS_DIR/$i.png"
-fi
-fi
-
-echo "Rendering '$ASSETS_DIR/$i@2.png'"
-
-if [[ -f "$ASSETS_DIR/$i@2.png" ]]; then
-  echo "$ASSETS_DIR/$i@2.png" exists.
-else
-if [[ -n "${RENDER_SVG}" ]]; then
-  "$RENDER_SVG" --export-id "$i" \
-                --dpi 192 \
-                --zoom 2 \
-                "$SRC_FILE" "$ASSETS_DIR/$i@2.png"
-else
-  "$INKSCAPE" --export-id="$i" \
-              --export-id-only \
-              --export-dpi=192 \
-              --export-filename="$ASSETS_DIR/$i@2.png" "$SRC_FILE" >/dev/null
-fi
-if [[ -n "${OPTIPNG}" ]]; then
-  "$OPTIPNG" -o7 --quiet "$ASSETS_DIR/$i@2.png"
-fi
-fi
-
+#!/usr/bin/env bash
+# Compatibility shim.
+#
+# These helpers used to hold their own hard-coded per-theme accent lists (and
+# needed inkscape/rendersvg). Both drifted from src/_sass/_theme-palettes.scss.
+# All assets are now produced by one generator that reads the palette directly.
+set -euo pipefail
+REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+while [[ ! -f "$REPO_DIR/scripts/generate-theme-assets.py" && "$REPO_DIR" != "/" ]]; do
+  REPO_DIR="$(dirname "$REPO_DIR")"
 done
-
-done
+exec python3 "$REPO_DIR/scripts/generate-theme-assets.py" "$@"

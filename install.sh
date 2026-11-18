@@ -30,7 +30,7 @@ fi
 SASSC_OPT="-M -t expanded"
 
 THEME_NAME=Dopamine
-THEME_VARIANTS=('-nord' '-dracula' '-gruvbox' '-tokyo-night' '-everforest' '-monokai' '-solarized' '-catppuccin' '-candy' '-tangerine' '-minty' '-berry' '-nebula')
+THEME_VARIANTS=('-nord' '-gruvbox' '-monokai' '-catppuccin' '-candy' '-tangerine' '-berry' '-magenta' '-sakura' '-coral')
 COLOR_VARIANTS=('-Light' '-Dark')
 
 if [[ "$(command -v gnome-shell)" ]]; then
@@ -65,7 +65,7 @@ OPTIONS:
 
   -n, --name NAME         Specify theme name (Default: $THEME_NAME)
 
-  -t, --theme VARIANT     Specify theme color variant(s) [nord|dracula|gruvbox|tokyo-night|everforest|monokai|solarized|catppuccin|candy|tangerine|minty|berry|nebula|all] (Default: default)
+  -t, --theme VARIANT     Specify theme color variant(s) [nord|gruvbox|monokai|catppuccin|candy|tangerine|berry|magenta|sakura|coral|all] (Default: default)
 
   -c, --color VARIANT     Specify color variant(s) [light|dark] (Default: All variants)
 
@@ -330,58 +330,6 @@ while [[ "$#" -gt 0 ]]; do
       shift
       for variant in "$@"; do
         case "$variant" in
-          nord)
-            themes+=("${THEME_VARIANTS[0]}")
-            shift
-            ;;
-          dracula)
-            themes+=("${THEME_VARIANTS[1]}")
-            shift
-            ;;
-          gruvbox)
-            themes+=("${THEME_VARIANTS[2]}")
-            shift
-            ;;
-          tokyo-night)
-            themes+=("${THEME_VARIANTS[3]}")
-            shift
-            ;;
-          everforest)
-            themes+=("${THEME_VARIANTS[4]}")
-            shift
-            ;;
-          monokai)
-            themes+=("${THEME_VARIANTS[5]}")
-            shift
-            ;;
-          solarized)
-            themes+=("${THEME_VARIANTS[6]}")
-            shift
-            ;;
-          catppuccin)
-            themes+=("${THEME_VARIANTS[7]}")
-            shift
-            ;;
-          candy)
-            themes+=("${THEME_VARIANTS[8]}")
-            shift
-            ;;
-          tangerine)
-            themes+=("${THEME_VARIANTS[9]}")
-            shift
-            ;;
-          minty)
-            themes+=("${THEME_VARIANTS[10]}")
-            shift
-            ;;
-          berry)
-            themes+=("${THEME_VARIANTS[11]}")
-            shift
-            ;;
-          nebula)
-            themes+=("${THEME_VARIANTS[12]}")
-            shift
-            ;;
           all)
             themes+=("${THEME_VARIANTS[@]}")
             shift
@@ -390,9 +338,14 @@ while [[ "$#" -gt 0 ]]; do
             break
             ;;
           *)
-            echo "ERROR: Unrecognized theme variant '$1'."
-            echo "Try '$0 --help' for more information."
-            exit 1
+            if [[ " ${THEME_VARIANTS[*]} " == *" -$variant "* ]]; then
+              themes+=("-$variant")
+              shift
+            else
+              echo "ERROR: Unrecognized theme variant '$variant'."
+              echo "Try '$0 --help' for more information."
+              exit 1
+            fi
             ;;
         esac
       done
@@ -592,49 +545,17 @@ activities_style() {
 
 install_theme_color() {
   if [[ "$theme" != '' ]]; then
-    case "$theme" in
-      -nord)
-        theme_color='nord'
-        ;;
-      -dracula)
-        theme_color='dracula'
-        ;;
-      -gruvbox)
-        theme_color='gruvbox'
-        ;;
-      -tokyo-night)
-        theme_color='tokyo-night'
-        ;;
-      -everforest)
-        theme_color='everforest'
-        ;;
-      -monokai)
-        theme_color='monokai'
-        ;;
-      -solarized)
-        theme_color='solarized'
-        ;;
-      -catppuccin)
-        theme_color='catppuccin'
-        ;;
-      -candy)
-        theme_color='candy'
-        ;;
-      -tangerine)
-        theme_color='tangerine'
-        ;;
-      -minty)
-        theme_color='minty'
-        ;;
-      -berry)
-        theme_color='berry'
-        ;;
-      -nebula)
-        theme_color='nebula'
-        ;;
-    esac
-    sed -i "/\$theme:/s/default/${theme_color}/" ${SRC_DIR}/gnome-shell/sass/_tweaks-temp.scss
-    sed -i "/\$theme:/s/default/${theme_color}/" ${SRC_DIR}/_sass/_tweaks-temp.scss
+    theme_color="${theme#-}"
+    if [[ " ${THEME_VARIANTS[*]} " != *" $theme "* ]]; then
+      echo "ERROR: Unrecognized theme variant '$theme'."
+      echo "Try '$0 --help' for more information."
+      exit 1
+    fi
+    # Write the whole line instead of substituting the literal 'default': the
+    # temp file can still hold a colour from a previous run, and the old
+    # sed-only-match-default trick then silently did nothing.
+    sed -i "s/^\$theme: .*/\$theme: '${theme_color}';/" "${SRC_DIR}/gnome-shell/sass/_tweaks-temp.scss"
+    sed -i "s/^\$theme: .*/\$theme: '${theme_color}';/" "${SRC_DIR}/_sass/_tweaks-temp.scss"
   fi
 }
 

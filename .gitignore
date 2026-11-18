@@ -13,3 +13,6 @@ src/gtk/assets-*.svg
 src/gtk/assets-*/
 !src/gtk/assets.svg
 !src/gtk/assets/
+
+# Python bytecode
+__pycache__/

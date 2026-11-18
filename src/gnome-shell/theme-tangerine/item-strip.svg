@@ -48,7 +48,7 @@
     <linearGradient
        id="color-primary-dark">
       <stop
-         stop-color="#FF8A1F"
+         stop-color="#CC6700"
          offset="1"
          id="stop14" />
     </linearGradient>
@@ -65,7 +65,7 @@
          height="16"
          rx="1.5"
          ry="1.5"
-         fill="#FF8A1F"
+         fill="#cc6700"
          stroke-linecap="round"
          stroke-linejoin="round"
          id="rect2"

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="262" viewBox="0 0 820 262" role="img" aria-label="berry palette">
+<rect width="820" height="262" rx="12" fill="#FFFFFF"/>
+<rect x="0.5" y="0.5" width="819" height="261" rx="12" fill="none" stroke="#E4E4E7"/>
+<rect x="18.0" y="18" width="384.0" height="226" rx="10" fill="#151519" stroke="#2A2A33"/>
+<text x="32.0" y="42" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="15" font-weight="600" fill="#FFFFFF">berry</text>
+<text x="82.0" y="42" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="10" letter-spacing="1.2" fill="#A1A1AA">DARK</text>
+<rect x="32.0" y="52.0" width="91.5" height="48" rx="6" fill="#44181F" stroke="rgba(0,0,0,0.10)"/>
+<text x="39.0" y="68.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">background</text>
+<text x="39.0" y="92.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#44181F</text>
+<rect x="129.5" y="52.0" width="91.5" height="48" rx="6" fill="#582228" stroke="rgba(0,0,0,0.10)"/>
+<text x="136.5" y="68.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">surface</text>
+<text x="136.5" y="92.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#582228</text>
+<rect x="227.0" y="52.0" width="91.5" height="48" rx="6" fill="#683132" stroke="rgba(0,0,0,0.10)"/>
+<text x="234.0" y="68.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">base</text>
+<text x="234.0" y="92.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#683132</text>
+<rect x="324.5" y="52.0" width="91.5" height="48" rx="6" fill="#7B4542" stroke="rgba(0,0,0,0.10)"/>
+<text x="331.5" y="68.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">base-alt</text>
+<text x="331.5" y="92.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#7B4542</text>
+<rect x="32.0" y="120.0" width="91.5" height="48" rx="6" fill="#FF6F91" stroke="rgba(0,0,0,0.10)"/>
+<text x="39.0" y="136.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">accent</text>
+<text x="39.0" y="160.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#FF6F91</text>
+<rect x="129.5" y="120.0" width="91.5" height="48" rx="6" fill="#FCEFED" stroke="rgba(0,0,0,0.10)"/>
+<text x="136.5" y="136.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#141418" opacity="0.85">text</text>
+<text x="136.5" y="160.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#141418">#FCEFED</text>
+<rect x="227.0" y="120.0" width="91.5" height="48" rx="6" fill="#F7B3AB" stroke="rgba(0,0,0,0.10)"/>
+<text x="234.0" y="136.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#141418" opacity="0.85">link</text>
+<text x="234.0" y="160.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#141418">#F7B3AB</text>
+<rect x="324.5" y="120.0" width="91.5" height="48" rx="6" fill="#FF1744" stroke="rgba(0,0,0,0.10)"/>
+<text x="331.5" y="136.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">error</text>
+<text x="331.5" y="160.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#FF1744</text>
+<rect x="32.0" y="198.0" width="113.9" height="14" fill="#582228"/>
+<rect x="145.9" y="198.0" width="178.0" height="14" fill="#683132"/>
+<rect x="323.9" y="198.0" width="64.1" height="14" fill="#FF6F91"/>
+<text x="32.0" y="226.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9" fill="#A1A1AA">surface · base · accent coverage</text>
+<rect x="418.0" y="18" width="384.0" height="226" rx="10" fill="#FAFAFB" stroke="#E7E7EC"/>
+<text x="432.0" y="42" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="15" font-weight="600" fill="#18181B">berry</text>
+<text x="482.0" y="42" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="10" letter-spacing="1.2" fill="#71717A">LIGHT</text>
+<rect x="432.0" y="52.0" width="91.5" height="48" rx="6" fill="#F9F1F2" stroke="rgba(0,0,0,0.10)"/>
+<text x="439.0" y="68.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#141418" opacity="0.85">background</text>
+<text x="439.0" y="92.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#141418">#F9F1F2</text>
+<rect x="529.5" y="52.0" width="91.5" height="48" rx="6" fill="#FDFCFC" stroke="rgba(0,0,0,0.10)"/>
+<text x="536.5" y="68.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#141418" opacity="0.85">surface</text>
+<text x="536.5" y="92.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#141418">#FDFCFC</text>
+<rect x="627.0" y="52.0" width="91.5" height="48" rx="6" fill="#F3DDE1" stroke="rgba(0,0,0,0.10)"/>
+<text x="634.0" y="68.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#141418" opacity="0.85">base</text>
+<text x="634.0" y="92.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#141418">#F3DDE1</text>
+<rect x="724.5" y="52.0" width="91.5" height="48" rx="6" fill="#EAC8CE" stroke="rgba(0,0,0,0.10)"/>
+<text x="731.5" y="68.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#141418" opacity="0.85">base-alt</text>
+<text x="731.5" y="92.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#141418">#EAC8CE</text>
+<rect x="432.0" y="120.0" width="91.5" height="48" rx="6" fill="#E91E63" stroke="rgba(0,0,0,0.10)"/>
+<text x="439.0" y="136.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">accent</text>
+<text x="439.0" y="160.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#E91E63</text>
+<rect x="529.5" y="120.0" width="91.5" height="48" rx="6" fill="#421018" stroke="rgba(0,0,0,0.10)"/>
+<text x="536.5" y="136.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">text</text>
+<text x="536.5" y="160.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#421018</text>
+<rect x="627.0" y="120.0" width="91.5" height="48" rx="6" fill="#651FFF" stroke="rgba(0,0,0,0.10)"/>
+<text x="634.0" y="136.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">link</text>
+<text x="634.0" y="160.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#651FFF</text>
+<rect x="724.5" y="120.0" width="91.5" height="48" rx="6" fill="#F50057" stroke="rgba(0,0,0,0.10)"/>
+<text x="731.5" y="136.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9.5" fill="#FFFFFF" opacity="0.85">error</text>
+<text x="731.5" y="160.0" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="11" fill="#FFFFFF">#F50057</text>
+<rect x="432.0" y="198.0" width="113.9" height="14" fill="#FDFCFC"/>
+<rect x="545.9" y="198.0" width="178.0" height="14" fill="#F3DDE1"/>
+<rect x="723.9" y="198.0" width="64.1" height="14" fill="#E91E63"/>
+<text x="432.0" y="226.0" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="9" fill="#71717A">surface · base · accent coverage</text>
+</svg>

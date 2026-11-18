@@ -1,7 +1,15 @@
 # Based on Bridge by ScionicSpectre and Adwaita by GNOME
 # vim:set ts=2 sw=2 sts=2 ai et:
+#
+# This is the GTK 2 version of Materia. It's whole purpose is to look as the
+# GTK 3 version as much as possible until GTK 2 dies completely.
+#
+# Note: comments for explaining styles are on the bottom of each file beside the
+# widget matches.
 
 # Declare the colours used throughout the theme.
+# There shouldn't be any fiddling with them in the theme files themselves in
+# order to not mess up the dark theme.
 
 # Text/base
 gtk-color-scheme = "text_color:#FFFFFF\nbase_color:#2B2B2B"
@@ -16,7 +24,7 @@ gtk-color-scheme = "menu_color:#3C3C3C"
 # Tooltips foreground/background
 gtk-color-scheme = "tooltip_fg_color:#FFFFFF\ntooltip_bg_color:#616161"
 # Links
-gtk-color-scheme = "link_color:#FFB3E0\nvisited_link_color:#CE93D8"
+gtk-color-scheme = "link_color:#8AB4F8\nvisited_link_color:#CE93D8"
 
 # Set GTK settings
 gtk-auto-mnemonics              = 1

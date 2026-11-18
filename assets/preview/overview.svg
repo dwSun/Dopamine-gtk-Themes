@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="454" viewBox="0 0 860 454" role="img" aria-label="Dopamine palette overview">
+<rect width="860" height="454" rx="12" fill="#FFFFFF"/>
+<rect x="0.5" y="0.5" width="859" height="453" rx="12" fill="none" stroke="#E4E4E7"/>
+<text x="18" y="28" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="13" font-weight="600" fill="#18181B">Dopamine palettes</text>
+<text x="136" y="27" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="9" letter-spacing="1.1" fill="#71717A">DARK · bg / surface / base / accent</text>
+<text x="408" y="27" font-family="'JetBrains Mono', 'Maple Mono', 'DejaVu Sans Mono', monospace" font-size="9" letter-spacing="1.1" fill="#71717A">LIGHT · bg / surface / base / accent</text>
+<text x="18" y="63" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">default</text>
+<rect x="136.0" y="46" width="58" height="26" rx="4" fill="#182E44"/>
+<rect x="198.0" y="46" width="58" height="26" rx="4" fill="#223A58"/>
+<rect x="260.0" y="46" width="58" height="26" rx="4" fill="#314468"/>
+<rect x="322.0" y="46" width="58" height="26" rx="4" fill="#FBDBB6"/>
+<rect x="402.0" y="46" width="58" height="26" rx="4" fill="#F1F5F9"/>
+<rect x="464.0" y="46" width="58" height="26" rx="4" fill="#FCFCFD"/>
+<rect x="526.0" y="46" width="58" height="26" rx="4" fill="#DDE8F3"/>
+<rect x="588.0" y="46" width="58" height="26" rx="4" fill="#B77143"/>
+<text x="18" y="99" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">nord</text>
+<rect x="136.0" y="82" width="58" height="26" rx="4" fill="#183344"/>
+<rect x="198.0" y="82" width="58" height="26" rx="4" fill="#224058"/>
+<rect x="260.0" y="82" width="58" height="26" rx="4" fill="#314B68"/>
+<rect x="322.0" y="82" width="58" height="26" rx="4" fill="#88C0D0"/>
+<rect x="402.0" y="82" width="58" height="26" rx="4" fill="#F1F6F9"/>
+<rect x="464.0" y="82" width="58" height="26" rx="4" fill="#FCFDFD"/>
+<rect x="526.0" y="82" width="58" height="26" rx="4" fill="#DDEBF3"/>
+<rect x="588.0" y="82" width="58" height="26" rx="4" fill="#5E81AC"/>
+<text x="18" y="135" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">gruvbox</text>
+<rect x="136.0" y="118" width="58" height="26" rx="4" fill="#442E18"/>
+<rect x="198.0" y="118" width="58" height="26" rx="4" fill="#584122"/>
+<rect x="260.0" y="118" width="58" height="26" rx="4" fill="#685531"/>
+<rect x="322.0" y="118" width="58" height="26" rx="4" fill="#FABD2F"/>
+<rect x="402.0" y="118" width="58" height="26" rx="4" fill="#F9F5F1"/>
+<rect x="464.0" y="118" width="58" height="26" rx="4" fill="#FDFCFC"/>
+<rect x="526.0" y="118" width="58" height="26" rx="4" fill="#F3E8DD"/>
+<rect x="588.0" y="118" width="58" height="26" rx="4" fill="#AF7D1B"/>
+<text x="18" y="171" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">monokai</text>
+<rect x="136.0" y="154" width="58" height="26" rx="4" fill="#441E18"/>
+<rect x="198.0" y="154" width="58" height="26" rx="4" fill="#582D22"/>
+<rect x="260.0" y="154" width="58" height="26" rx="4" fill="#684131"/>
+<rect x="322.0" y="154" width="58" height="26" rx="4" fill="#F9357C"/>
+<rect x="402.0" y="154" width="58" height="26" rx="4" fill="#F9F2F1"/>
+<rect x="464.0" y="154" width="58" height="26" rx="4" fill="#FDFCFC"/>
+<rect x="526.0" y="154" width="58" height="26" rx="4" fill="#F3E0DD"/>
+<rect x="588.0" y="154" width="58" height="26" rx="4" fill="#C46B02"/>
+<text x="18" y="207" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">catppuccin</text>
+<rect x="136.0" y="190" width="58" height="26" rx="4" fill="#3B1844"/>
+<rect x="198.0" y="190" width="58" height="26" rx="4" fill="#512258"/>
+<rect x="260.0" y="190" width="58" height="26" rx="4" fill="#653168"/>
+<rect x="322.0" y="190" width="58" height="26" rx="4" fill="#F5C2E7"/>
+<rect x="402.0" y="190" width="58" height="26" rx="4" fill="#F7F1F9"/>
+<rect x="464.0" y="190" width="58" height="26" rx="4" fill="#FDFCFD"/>
+<rect x="526.0" y="190" width="58" height="26" rx="4" fill="#EEDDF3"/>
+<rect x="588.0" y="190" width="58" height="26" rx="4" fill="#8839EF"/>
+<text x="18" y="243" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">candy</text>
+<rect x="136.0" y="226" width="58" height="26" rx="4" fill="#441837"/>
+<rect x="198.0" y="226" width="58" height="26" rx="4" fill="#582244"/>
+<rect x="260.0" y="226" width="58" height="26" rx="4" fill="#68314F"/>
+<rect x="322.0" y="226" width="58" height="26" rx="4" fill="#FF4F9A"/>
+<rect x="402.0" y="226" width="58" height="26" rx="4" fill="#F9F1F7"/>
+<rect x="464.0" y="226" width="58" height="26" rx="4" fill="#FDFCFD"/>
+<rect x="526.0" y="226" width="58" height="26" rx="4" fill="#F3DDEC"/>
+<rect x="588.0" y="226" width="58" height="26" rx="4" fill="#E91E63"/>
+<text x="18" y="279" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">tangerine</text>
+<rect x="136.0" y="262" width="58" height="26" rx="4" fill="#442918"/>
+<rect x="198.0" y="262" width="58" height="26" rx="4" fill="#583B22"/>
+<rect x="260.0" y="262" width="58" height="26" rx="4" fill="#684F31"/>
+<rect x="322.0" y="262" width="58" height="26" rx="4" fill="#FF8A1F"/>
+<rect x="402.0" y="262" width="58" height="26" rx="4" fill="#F9F4F1"/>
+<rect x="464.0" y="262" width="58" height="26" rx="4" fill="#FDFCFC"/>
+<rect x="526.0" y="262" width="58" height="26" rx="4" fill="#F3E6DD"/>
+<rect x="588.0" y="262" width="58" height="26" rx="4" fill="#CC6700"/>
+<text x="18" y="315" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">berry</text>
+<rect x="136.0" y="298" width="58" height="26" rx="4" fill="#44181F"/>
+<rect x="198.0" y="298" width="58" height="26" rx="4" fill="#582228"/>
+<rect x="260.0" y="298" width="58" height="26" rx="4" fill="#683132"/>
+<rect x="322.0" y="298" width="58" height="26" rx="4" fill="#FF6F91"/>
+<rect x="402.0" y="298" width="58" height="26" rx="4" fill="#F9F1F2"/>
+<rect x="464.0" y="298" width="58" height="26" rx="4" fill="#FDFCFC"/>
+<rect x="526.0" y="298" width="58" height="26" rx="4" fill="#F3DDE1"/>
+<rect x="588.0" y="298" width="58" height="26" rx="4" fill="#E91E63"/>
+<text x="18" y="351" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">magenta</text>
+<rect x="136.0" y="334" width="58" height="26" rx="4" fill="#3C1026"/>
+<rect x="198.0" y="334" width="58" height="26" rx="4" fill="#511A32"/>
+<rect x="260.0" y="334" width="58" height="26" rx="4" fill="#62283C"/>
+<rect x="322.0" y="334" width="58" height="26" rx="4" fill="#F047A8"/>
+<rect x="402.0" y="334" width="58" height="26" rx="4" fill="#F9F1F5"/>
+<rect x="464.0" y="334" width="58" height="26" rx="4" fill="#FDFCFC"/>
+<rect x="526.0" y="334" width="58" height="26" rx="4" fill="#F3DDE8"/>
+<rect x="588.0" y="334" width="58" height="26" rx="4" fill="#D6008C"/>
+<text x="18" y="387" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">sakura</text>
+<rect x="136.0" y="370" width="58" height="26" rx="4" fill="#522833"/>
+<rect x="198.0" y="370" width="58" height="26" rx="4" fill="#62323B"/>
+<rect x="260.0" y="370" width="58" height="26" rx="4" fill="#714146"/>
+<rect x="322.0" y="370" width="58" height="26" rx="4" fill="#FF9CC2"/>
+<rect x="402.0" y="370" width="58" height="26" rx="4" fill="#F9F1F3"/>
+<rect x="464.0" y="370" width="58" height="26" rx="4" fill="#FDFCFC"/>
+<rect x="526.0" y="370" width="58" height="26" rx="4" fill="#F3DDE3"/>
+<rect x="588.0" y="370" width="58" height="26" rx="4" fill="#D6477C"/>
+<text x="18" y="423" font-family="Inter, 'Noto Sans CJK SC', 'Noto Sans', 'DejaVu Sans', sans-serif" font-size="12" fill="#18181B">coral</text>
+<rect x="136.0" y="406" width="58" height="26" rx="4" fill="#4A2117"/>
+<rect x="198.0" y="406" width="58" height="26" rx="4" fill="#5E3121"/>
+<rect x="260.0" y="406" width="58" height="26" rx="4" fill="#6F462F"/>
+<rect x="322.0" y="406" width="58" height="26" rx="4" fill="#FF7A5C"/>
+<rect x="402.0" y="406" width="58" height="26" rx="4" fill="#F9F2F1"/>
+<rect x="464.0" y="406" width="58" height="26" rx="4" fill="#FDFCFC"/>
+<rect x="526.0" y="406" width="58" height="26" rx="4" fill="#F3E2DD"/>
+<rect x="588.0" y="406" width="58" height="26" rx="4" fill="#D94A32"/>
+</svg>

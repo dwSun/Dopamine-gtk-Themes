@@ -1,39 +1,12 @@
-#!/bin/bash
-
-RENDER_SVG="$(command -v rendersvg)" || true
-INKSCAPE="$(command -v inkscape)" || true
-OPTIPNG="$(command -v optipng)" || true
-
-INDEX="assets.txt"
-
-for theme in '' '-nord' '-dracula' '-gruvbox' '-tokyo-night' '-everforest' '-monokai' '-solarized' '-catppuccin'; do
-  for color in '' '-dark'; do
-
-    ASSETS_DIR="assets${theme}${color}"
-    SRC_FILE="assets${theme}${color}.svg"
-
-    # [[ -d $ASSETS_DIR ]] && rm -rf $ASSETS_DIR
-    mkdir -p $ASSETS_DIR
-
-    for i in `cat $INDEX`; do
-      if [[ -f "$ASSETS_DIR/$i.png" ]]; then
-        echo "'$ASSETS_DIR/$i.png' exist!"
-      else
-        echo "Rendering '$ASSETS_DIR/$i.png'"
-        if [[ -n "${RENDER_SVG}" ]]; then
-          "$RENDER_SVG" --export-id "$i" \
-                        "$SRC_FILE" "$ASSETS_DIR/$i.png"
-        else
-          "$INKSCAPE" --export-id="$i" \
-                      --export-id-only \
-                      --export-filename="$ASSETS_DIR/$i.png" "$SRC_FILE" >/dev/null
-        fi
-        if [[ -n "${OPTIPNG}" ]]; then
-          "$OPTIPNG" -o7 --quiet "$ASSETS_DIR/$i.png"
-        fi
-      fi
-    done
-  done
+#!/usr/bin/env bash
+# Compatibility shim.
+#
+# These helpers used to hold their own hard-coded per-theme accent lists (and
+# needed inkscape/rendersvg). Both drifted from src/_sass/_theme-palettes.scss.
+# All assets are now produced by one generator that reads the palette directly.
+set -euo pipefail
+REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+while [[ ! -f "$REPO_DIR/scripts/generate-theme-assets.py" && "$REPO_DIR" != "/" ]]; do
+  REPO_DIR="$(dirname "$REPO_DIR")"
 done
-
-echo -e "DONE!"
+exec python3 "$REPO_DIR/scripts/generate-theme-assets.py" "$@"

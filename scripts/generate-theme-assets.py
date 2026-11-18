@@ -21,18 +21,33 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+from palette_utils import hex_to_rgb, parse_palettes
+
 ROOT = Path(__file__).resolve().parents[1]
 
-THEMES: dict[str, dict[str, tuple[int, int, int]]] = {
-    "nord":        {"dark": (0x5E, 0x81, 0xAC), "light": (0x88, 0xC0, 0xD0)},
-    "dracula":     {"dark": (0xFF, 0x79, 0xC6), "light": (0xFF, 0xB3, 0xE0)},
-    "gruvbox":     {"dark": (0xD7, 0x99, 0x21), "light": (0xFA, 0xBD, 0x2F)},
-    "tokyo-night": {"dark": (0x7A, 0xA2, 0xF7), "light": (0xA9, 0xC2, 0xFF)},
-    "everforest":  {"dark": (0xA7, 0xC0, 0x80), "light": (0xC5, 0xD9, 0xA0)},
-    "monokai":     {"dark": (0xF9, 0x26, 0x72), "light": (0xFF, 0x6B, 0x9F)},
-    "solarized":   {"dark": (0xB5, 0x89, 0x00), "light": (0xE6, 0xB4, 0x50)},
-    "catppuccin":  {"dark": (0xF5, 0xC2, 0xE7), "light": (0xFF, 0xE0, 0xF5)},
-}
+
+def build_theme_colors() -> dict[str, dict[str, tuple[int, int, int]]]:
+    """Derive every variant's asset accent from the palette SCSS.
+
+    The naming follows the *source* asset reference, not the GNOME variant:
+      * ``"dark"``  → pixels used by Light themes (source ``#1A73E8``)
+      * ``"light"`` → pixels used by Dark themes  (source ``#3281EA``)
+
+    Keeping this derived instead of hard-coded is what makes the five dopamine
+    themes get their own focus rings; they used to be left upstream blue.
+    """
+    colors: dict[str, dict[str, tuple[int, int, int]]] = {}
+    for name, modes in parse_palettes().items():
+        if name == "default":  # default reuses the untouched upstream assets
+            continue
+        colors[name] = {
+            "dark": hex_to_rgb(modes["light"]["primary"]),
+            "light": hex_to_rgb(modes["dark"]["primary"]),
+        }
+    return colors
+
+
+THEMES = build_theme_colors()
 
 # Upstream blue references used in the base assets.
 # "dark"  primary maps from the darker blue (#1A73E8).
@@ -209,12 +224,17 @@ def generate_gtk2_gtkrc(theme: str, dark_rgb: tuple, light_rgb: tuple) -> None:
         if not src.exists():
             continue
         dst = base / dst_name
+        # The base gtkrc files both reference #0078D4/#1A73E8; map them to the
+        # accent of the variant this file will be installed for. Previously the
+        # dark gtkrc always got the *light* accent, so GTK2 dark themes showed
+        # the wrong (darker) selection colour.
+        accent = dark_hex if src_name == "gtkrc" else light_hex
         text = src.read_text()
         text = sed_replace(text, [
-            ("#0078D4", dark_hex.upper()),
-            ("#0078d4", dark_hex.lower()),
-            ("#1A73E8", dark_hex.upper()),
-            ("#1a73e8", dark_hex.lower()),
+            ("#0078D4", accent.upper()),
+            ("#0078d4", accent.lower()),
+            ("#1A73E8", accent.upper()),
+            ("#1a73e8", accent.lower()),
             ("#3281EA", light_hex.upper()),
             ("#3281ea", light_hex.lower()),
         ])
